@@ -1,13 +1,12 @@
 #include <stdio.h>
 
+int size2;
+
 int strLen(string1){
     int i;
     int j = 0;
     for (i = 0; ;i++){
-        if(string1[i] == '\0'){
-            break;
-        }
-        else {
+        if(string1[i] != '\0'){
             j++;
         }
     }
