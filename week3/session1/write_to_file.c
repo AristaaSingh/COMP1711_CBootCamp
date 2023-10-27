@@ -3,6 +3,7 @@
 int main() {
     char filename [] = "data.txt";
     FILE *file = fopen(filename, "w"); // or "a", "w+", "a+"
+    // what does *file mean??
     // w is write mode, it over-writes the file every time you run the program.
     // a is append mode, it appends new information at the end of the file to avoid losing previous data. 
     if (file == NULL) {

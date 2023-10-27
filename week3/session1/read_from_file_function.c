@@ -14,10 +14,12 @@ int main() {
     char filename [] = "data.txt";
     FILE *file = open_file(filename, "r");
 
-    int buffer_size = 100;
+    int buffer_size = 30;
     char line_buffer[buffer_size];
-    while (fgets(line_buffer, buffer_size, file) != NULL) {
+    int i=0;
+    while (fgets(line_buffer, buffer_size, file) != NULL && i<7) {
         printf("%s", line_buffer);
+        i++;
     }
 
     fclose(file);
