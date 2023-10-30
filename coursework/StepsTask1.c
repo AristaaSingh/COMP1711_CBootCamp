@@ -43,23 +43,45 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 // Complete the main function
 int main() {
+   
+    // creating the file pointer
     char filename[] = "FitnessData_2023.csv";
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
         perror("");
         return 1;
     }
-    int record_count = 0;
-    int buffer_size = 100;
+    
+    int record_count = 0; // for the number of records in the given csv file
+    int buffer_size = 100; 
+    // creating strings to store values from the tokeniseRecord function
+    char date[11];
+    char time[6];
+    char steps[10];
+    
+    // creating a table fitness_data with a large number of rows (200 in this case)
+    FITNESS_DATA fitness_data[500];
+    // reading each line of the csv file one by one and copying it to the fitness_data table
     char line_buffer[buffer_size];
     while (fgets(line_buffer, buffer_size, file) != NULL){
-        record_count++;
+        tokeniseRecord(line_buffer, ",", date, time, steps);
+        strcpy(fitness_data[record_count].date, date); 
+        // the value of date from tokeniseRecord function is copied to the table, to the row number being whatever the value
+        // of record_count during this iteration is, to the field 'date' in the table.
+        strcpy(fitness_data[record_count].time, time);
+        // similarly copied the value of time from the tokeniseRecord output of the currently iterating row to the time field 
+        int stepsint = atoi(steps); // converted steps from string to integer form
+        fitness_data[record_count].steps = stepsint; // assigned the integer steps value to the steps field of the table
+        record_count++; // every time one row finishes iterating, record_count becomes += 1
     }
+    
+    // final value of record_count gives the total number of records in the csv file
     printf("Number of records in file: %d\n", record_count);
-    FITNESS_DATA fitness_data[record_count];
-    int i;
-    for (i = 0; i <= record_count; i++){
-        
+    
+    // printing the first 3 rows of the fitness_data table
+    int i; 
+    for (i = 0; i < 3; i++) {
+        printf("%s/%s/%d\n", fitness_data[i].date, fitness_data[i].time, fitness_data[i].steps);
     }
     fclose(file);
     return 0;
