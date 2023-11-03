@@ -4,10 +4,12 @@ int reverseArray(char my_array[], int my_array_len){
     int count = my_array_len - 1;
     char array2[my_array_len];
     for (count; count >= 0; count --){
-        array2[count] = my_array[my_array_len - count];
+        array2[count] = my_array[my_array_len - 1 - count];
     }
     int j;
-    for (j = 0, j < my_array_len,)
+    for (j = 0; j < my_array_len; j++){
+        printf("The integer at index %d of reversed array is: %d\n", j, array2[j]);
+    }
 }
 
 int main(){
