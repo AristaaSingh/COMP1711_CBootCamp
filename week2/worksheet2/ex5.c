@@ -15,7 +15,8 @@ void concatString(char string1[], char string2[]){
         count2 ++;
         count_new ++;
     }
-    printf("%d\n%d\n", count1, count2);
+    new_string[count_new] = '\0';
+    printf("Count of first string: %d\nCount of second string: %d\n", count1, count2);
     printf("%s\n", new_string);
 
 }
