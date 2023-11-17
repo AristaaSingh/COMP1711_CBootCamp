@@ -9,5 +9,6 @@
 #include <stdlib.h>
 
 FILE *open_file(char filename[], char mode[]);
+FILE *open_file(char filename[], char mode[]);
 
 #endif /* UTILS_H */
