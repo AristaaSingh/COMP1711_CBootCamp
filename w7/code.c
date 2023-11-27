@@ -19,16 +19,13 @@ int main()
 
     char choice;
     int counter = 0;
-    float mean = 0;
+    int line_count;
+    float my_b;
+    float my_mean = 0;
 
     while (1)
     {
         FILE *input = fopen(filename, "r");
-        if (!input)
-        {
-            printf("Error: File could not be opened\n");
-            return 1;
-        }
 
         printf("A: View all your blood iron levels\n");                       // BRONZE
         printf("B: View your average blood iron level\n");                    // BRONZE
@@ -53,15 +50,8 @@ int main()
         // this allows for either capital or lower case
         case 'A':
         case 'a':
-            counter = 0;
-            while (fgets(line, buffer_size, input))
-            {
-                // split up the line and store it in the right place
-                // using the & operator to pass in a pointer to the bloodIron so it stores it
-                tokeniseRecord(line, ",", daily_readings[counter].date, &daily_readings[counter].bloodIron);
-                counter++;
-            }
-            for (int i = 0; i < counter; i++)
+            line_count = read_file(input, daily_readings);
+            for (int i = 0; i < line_count; i++)
             {
                 printf("%s - Blood iron: %.2f\n", daily_readings[i].date, daily_readings[i].bloodIron);
             }
@@ -70,64 +60,30 @@ int main()
 
         case 'B':
         case 'b':
-            counter = 0;
-            while (fgets(line, buffer_size, input))
-            {
-                // split up the line and store it in the right place
-                // using the & operator to pass in a pointer to the bloodIron so it stores it
-                tokeniseRecord(line, ",", daily_readings[counter].date, &daily_readings[counter].bloodIron);
-                mean += daily_readings[counter].bloodIron;
-                counter++;
-            }
-            mean /= counter;
-            printf("Your average blood iron was %.2f\n", mean);
+            line_count = read_file(input, daily_readings);
+            my_mean = find_mean(daily_readings, line_count);
+            printf("Your average blood iron was %.2f\n", my_mean);
             fclose(input);
             break;
 
         case 'C':
         case 'c':
-            counter = 0;
-            float max = 0;
-            while (fgets(line, buffer_size, input))
-            {
-                // split up the line and store it in the right place
-                // using the & operator to pass in a pointer to the bloodIron so it stores it
-                tokeniseRecord(line, ",", daily_readings[counter].date, &daily_readings[counter].bloodIron);
-                if (daily_readings[counter].bloodIron > max){
-                    max = daily_readings[counter].bloodIron;
-                }
-                counter++;
-            }
-            printf("Your highest blood iron level is: %.2f\n", max);
+            line_count = read_file(input, daily_readings);
+            float my_max = find_highest(daily_readings, line_count);
+            printf("Your highest blood iron level is: %.2f\n", my_max);
             break;
 
         case 'D':
         case 'd':
-            counter = 0;
-            float min = 100000;
-            while (fgets(line, buffer_size, input))
-            {
-                // split up the line and store it in the right place
-                // using the & operator to pass in a pointer to the bloodIron so it stores it
-                tokeniseRecord(line, ",", daily_readings[counter].date, &daily_readings[counter].bloodIron);
-                if (daily_readings[counter].bloodIron < min){
-                    min = daily_readings[counter].bloodIron;
-                }
-                counter++;
-            }
-            printf("Your lowest blood iron level is: %.2f\n", min);
+            line_count = read_file(input, daily_readings);
+            float my_min = find_lowest(daily_readings, line_count);
+            printf("Your lowest blood iron level is: %.2f\n", my_min);
             break;
 
         case 'E':
         case 'e':
-            counter = 0;
-            while (fgets(line, buffer_size, input))
-            {
-                // split up the line and store it in the right place
-                // using the & operator to pass in a pointer to the bloodIron so it stores it
-                tokeniseRecord(line, ",", daily_readings[counter].date, &daily_readings[counter].bloodIron);
-                counter++;
-            }
+            line_count = read_file(input, daily_readings);
+            monthly_iron(daily_readings, line_count);
             break;
 
         case 'F':

@@ -60,9 +60,14 @@ void tokeniseRecord(const char *input, const char *delimiter,
  * @param mode the mode (r/w/a/r+/w+/a+)
  * @return FILE* The file object to store the opened file in.
  */
-FILE *open_file(char *filename, char *mode)
+FILE *open_file(char filename[], char mode[]) 
 {
-    // to do
+    FILE *file = fopen(filename, mode);
+    if (file == NULL) {
+        perror("");
+        exit(1);
+    }
+    return file;
 }
 
 /**
@@ -74,7 +79,16 @@ FILE *open_file(char *filename, char *mode)
  */
 int read_file(FILE *inputFile, reading *dataArray)
 {
-    // to do
+    int counter = 0;
+    char line[buffer_size];
+    while (fgets(line, buffer_size, inputFile))
+    {
+        // split up the line and store it in the right place
+        // using the & operator to pass in a pointer to the bloodIron so it stores it
+        tokeniseRecord(line, ",", dataArray[counter].date, &dataArray[counter].bloodIron);
+        counter++;
+    }
+    return counter;
 }
 
 /**
@@ -99,7 +113,14 @@ int data_checker(reading *dataArray, int numReadings)
  */
 float find_mean(reading* dataArray, int numReadings)
 {
-    // to do
+    int i;
+    float mean;
+    for (i = 0; i < numReadings; i++)
+    {
+        mean += dataArray[i].bloodIron;
+    }
+    mean /= numReadings;
+    return mean;
 }
 
 /**
@@ -111,7 +132,14 @@ float find_mean(reading* dataArray, int numReadings)
  */
 float find_highest(reading* dataArray, int numReadings)
 {
-    // to do
+    int i;
+    float max = 0;
+    for (i = 0; i < numReadings; i++){
+        if (dataArray[i].bloodIron > max){
+            max = dataArray[i].bloodIron;
+        }
+    }
+    return max;
 }
 
 /**
@@ -123,7 +151,14 @@ float find_highest(reading* dataArray, int numReadings)
  */
 float find_lowest(reading* dataArray, int numReadings)
 {
-    // to do
+    int i;
+    float min = 100000;
+    for (i = 0; i < numReadings; i++){
+        if (dataArray[i].bloodIron < min){
+            min = dataArray[i].bloodIron;
+        }
+    }
+    return min;
 }
 
 
@@ -135,5 +170,15 @@ float find_lowest(reading* dataArray, int numReadings)
  */
 void monthly_iron(reading* dataArray, int numReadings)
 {
-    // to do
+    int i;
+    char month[4];
+    printf("Enter the month you want to view: JAN / FEB / MAR etc...\n");
+    scanf("%s", month);
+    printf("Printing the blood iron levels for the month %s.\n", month);
+    for (i = 0; i < numReadings; i++){
+        char *result = strstr(dataArray[i].date, month);
+        if (result != NULL){
+            printf("%s, %f\n", dataArray[i].date, dataArray[i].bloodIron);
+        }
+    }
 }
