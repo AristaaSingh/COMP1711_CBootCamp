@@ -35,7 +35,7 @@ void tokeniseRecord(const char *input, const char *delimiter,
     // Free the duplicated string
     free(inputCopy);
 
-                    }
+}
 
 int file_to_struct(FILE *inputFile, FITNESS_DATA *dataArray)
 {
@@ -62,10 +62,11 @@ int main() {
     char choice;
     char my_filename[100];
     int num_records;
+    FILE *file_pointer;
     FITNESS_DATA my_records[500];
 
     while(1){
-        printf("Meny options:\n");
+        printf("Menu options:\n");
         printf("A: Specify the filename to be imported\n");
         printf("B: Display the total number of records in the file\n");
         printf("C: Find the date and time of the timeslot with the fewest steps\n");
@@ -74,8 +75,7 @@ int main() {
         printf("F: Find the longest continuous period where the step count is above 500 steps\n");
         printf("Q: Quit\n");
         printf("Enter Choice: ");
-        choice = getchar();
-        while (getchar() != '\n');
+        scanf(" %c", &choice);
 
         switch(choice){
 
@@ -83,7 +83,7 @@ int main() {
             case 'A':
                 printf("Input filename: ");
                 scanf("%s", my_filename);
-                FILE *file_pointer = fopen(my_filename, "r");
+                file_pointer = fopen(my_filename, "r");
                 if (file_pointer == NULL) {
                     printf("Error: Could not find or open the file.\n");
                     exit(1);
@@ -92,13 +92,45 @@ int main() {
                 num_records = file_to_struct(file_pointer, my_records);
                 int i;
                 for (i = 0; i < num_records; i++){
-                    if (my_records[i].steps == NULL){
+                    if (my_records[i].date == NULL){
+                        printf("Error: Could not find or open the file.\n");
+                        exit(1);
+                    }
+                    if (my_records[i].time == NULL){
+                        printf("Error: Could not find or open the file.\n");
+                        exit(1);
+                    }
+                    if (my_records[i].steps == 0){
                         printf("Error: Could not find or open the file.\n");
                         exit(1);
                     }
                 }
                 printf("File successfully loaded.\n");
-                fclose(file_pointer);
+                break;
+
+            case 'b':
+            case 'B':
+                printf("Total records: %d\n", num_records);
+                break;
+
+            case 'c':
+            case 'C':
+                //int i;
+                //int min = 100000;
+                //int line_number;
+                //for (i = 0; i < num_records; i++){
+                //    if (my_records[i].steps < min){
+                //       min = my_records[i].steps;
+                //        line_number = i;
+                //    }
+                //printf("Fewest steps")
+                //}
+                return 0;
+                break;
+            
+            case 'q':
+            case 'Q':
+                exit(0);
                 break;
         }
     }

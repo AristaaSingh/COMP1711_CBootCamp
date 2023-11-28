@@ -13,5 +13,6 @@ typedef struct {
 
 // Helper function prototypes
 void tokeniseRecord(const char *input, const char *delimiter, char *date, char *time, char *steps);
+int file_to_struct(FILE *inputFile, FITNESS_DATA *dataArray);
 
 #endif // FITNESS_DATA_STRUCT_H
