@@ -7,54 +7,102 @@
 
 // Define any additional variables here
 // Global variables for filename and FITNESS_DATA array
+#define buffer_size 100
 
+// This is your helper function. Do not change it in any way.
+// Inputs: character array representing a row; the delimiter character
+// Ouputs: date character array; time character array; steps character array
+void tokeniseRecord(const char *input, const char *delimiter,
+                    char *date, char *time, char *steps) {
+    // Create a copy of the input string as strtok modifies the string
+    char *inputCopy = strdup(input);
+    
+    // Tokenize the copied string
+    char *token = strtok(inputCopy, delimiter);
+    if (token != NULL) {        strcpy(date, token);
+    }
+    
+    token = strtok(NULL, delimiter);
+    if (token != NULL) {
+        strcpy(time, token);
+    }
+    
+    token = strtok(NULL, delimiter);
+    if (token != NULL) {
+        strcpy(steps, token);
+    }
+    
+    // Free the duplicated string
+    free(inputCopy);
+
+                    }
+
+int file_to_struct(FILE *inputFile, FITNESS_DATA *dataArray)
+{
+    int counter = 0;
+    char line[buffer_size];
+    char date_temp[11];
+    char time_temp[6];
+    char steps_temp[10];
+    while (fgets(line, buffer_size, inputFile))
+    {
+        tokeniseRecord(line, ",", date_temp, time_temp, steps_temp);
+        strcpy(dataArray[counter].date, date_temp);
+        strcpy(dataArray[counter].time, time_temp);
+        int numsteps = atoi(steps_temp);
+        dataArray[counter].steps = numsteps;
+        counter++;
+    }
+    return counter;
+}
 
 // Complete the main function
 int main() {
 
-    FITNESS_DATA step_records[1000];
     char choice;
-    char line[buffer_size];
-    char *filename;
-    int record_count;
+    char my_filename[100];
+    int num_records;
+    FITNESS_DATA my_records[500];
 
     while(1){
-        printf("Menu Options:\n");
+        printf("Meny options:\n");
         printf("A: Specify the filename to be imported\n");
         printf("B: Display the total number of records in the file\n");
         printf("C: Find the date and time of the timeslot with the fewest steps\n");
-        printf("D: Find the data and time of the timeslot with the largest number of steps\n");
+        printf("D: Find the date and time of the timeslot with the largest number of steps\n");
         printf("E: Find the mean step count of all the records in the file\n");
         printf("F: Find the longest continuous period where the step count is above 500 steps\n");
-        printf("Q: Quit\n\n");
+        printf("Q: Quit\n");
         printf("Enter Choice: ");
-
-        // get the next character typed in and store in variable 'choice'
         choice = getchar();
-        // this gets rid of the newline character which the user will enter
-        // as otherwise this will stay in the stdin and be read next time
         while (getchar() != '\n');
 
-        // switch statement to control the menu.
-        switch (choice){
-            case 'A':
+        switch(choice){
+
             case 'a':
+            case 'A':
                 printf("Input filename: ");
-                scanf("%s", filename);
-                FILE *file = fopen(filename, "r");
-                if (file == NULL) {
-                    perror("");
+                scanf("%s", my_filename);
+                FILE *file_pointer = fopen(my_filename, "r");
+                if (file_pointer == NULL) {
+                    printf("Error: Could not find or open the file.\n");
                     exit(1);
                 }
-                fclose(file);
-
-            case 'B':
-            case 'b':
-                
+                char line[buffer_size];
+                num_records = file_to_struct(file_pointer, my_records);
+                int i;
+                for (i = 0; i < num_records; i++){
+                    if (my_records[i].steps == NULL){
+                        printf("Error: Could not find or open the file.\n");
+                        exit(1);
+                    }
+                }
+                printf("File successfully loaded.\n");
+                fclose(file_pointer);
                 break;
-
         }
     }
+   
 }
 
 

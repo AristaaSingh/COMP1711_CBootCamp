@@ -46,6 +46,7 @@ void tokeniseRecord(const char *input, const char *delimiter,
         // we have to tell C that bloodIron is a pointer so it stores it.
         *bloodIron = atof(token);
     }
+    
 
     // Free the duplicated string
     free(inputCopy);
