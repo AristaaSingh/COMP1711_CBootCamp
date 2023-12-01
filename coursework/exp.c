@@ -35,16 +35,19 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 }
 
-
 int main() {
 
     // defining variables needed throughout the program
     int i;
     FitnessData my_records[500];
+    FitnessData new_records[500];
     char filename[100];
     char line[100];
-    int counter = 0;
+    int num_rec = 0;
     char steps_temp[10];
+    int min = 100000;
+    int j;
+    int count = 0;
 
     // taking filename from user and opening it
     printf("Enter filename: ");
@@ -59,13 +62,13 @@ int main() {
 
     // putting the records into FitnessData structs
     while (fgets(line, 100, file_pointer)){
-        tokeniseRecord(line, ",", my_records[counter].date, my_records[counter].time, steps_temp);
-        my_records[counter].steps = atoi(steps_temp);
-        counter++;
+        tokeniseRecord(line, ",", my_records[num_rec].date, my_records[num_rec].time, steps_temp);
+        my_records[num_rec].steps = atoi(steps_temp);
+        num_rec++;
     }
 
     // checking the structs to see if the file has missing data or unexpected format
-    for (i = 0; i < counter; i++){
+    for (i = 0; i < num_rec; i++){
         if (strlen(my_records[i].date) != 10){
             printf("Error: Could not find or open a file.\n");
             exit(1);
@@ -84,9 +87,13 @@ int main() {
     char *new_filename = strcat(filename, ".tsv");
     FILE *new_pointer = fopen(new_filename, "w+");
     
+    int step_array[num_rec];
+    for (i = 0; i < num_rec; i++){
+        step_array[i] = my_records[i].steps;
+        printf("%d\n", step_array[i]);
+    }
     
+    fclose(file_pointer);
+    fclose(new_pointer);
     
-    
-    
-
 }
